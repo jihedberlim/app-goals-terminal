@@ -1,4 +1,4 @@
-const { select, input } = require('@inquirer/prompts')
+const { select, input, checkbox } = require('@inquirer/prompts')
 
 let goal = {
   value: 'Drink 3 liters of water a day',
@@ -18,6 +18,33 @@ const registerGoal = async () => {
     value: goal,
     checked: false,
    })
+}
+
+const listGoal = async () => {
+  const answers = await checkbox({
+    message: "Use <arrows> to navigate, press <space> to select and <enter> to proceed.",
+    choices: [...goals],
+    instructions: false,
+  })
+
+  if(answers.length == 0) {
+    console.log("No goal selected!");
+    return
+  }
+
+  goals.forEach((objective) => {
+    objective.checked = false
+  })
+
+  answers.forEach((answer) => {
+    const goal = goals.find((objective) => {
+      return objective.value == answer
+    })
+
+    goal.checked = true
+  })
+
+  console.log("Goals marked as completed!");
 }
 
 const start = async () => {
@@ -48,11 +75,10 @@ const start = async () => {
         console.log(goals);
         break;
       case "list":
-        console.log("Let's list!");
+        await listGoal();
         break;
       case "exit":
         console.log("See you soon!");
-      
         return
     }
   }
