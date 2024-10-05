@@ -27,14 +27,14 @@ const listGoal = async () => {
     instructions: false,
   })
 
+  goals.forEach((objective) => {
+    objective.checked = false
+  })
+  
   if(answers.length == 0) {
     console.log("No goal selected!");
     return
   }
-
-  goals.forEach((objective) => {
-    objective.checked = false
-  })
 
   answers.forEach((answer) => {
     const goal = goals.find((objective) => {
