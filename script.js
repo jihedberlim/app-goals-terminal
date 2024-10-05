@@ -30,7 +30,7 @@ const listGoal = async () => {
   goals.forEach((objective) => {
     objective.checked = false
   })
-  
+
   if(answers.length == 0) {
     console.log("No goal selected!");
     return
@@ -58,8 +58,24 @@ const realizedGoal = async () => {
   }
 
   await select({
-    message: "Realized Goals",
+    message: "Realized Goals " + realized.length,
     choices: [...realized]
+  })
+}
+
+const openGoal = async () => {
+  const opened = goals.filter((goal) => {
+    return goal.checked != true
+  })
+
+  if(opened.length == 0) {
+    console.log("No open goals!");
+    return
+  }
+
+  await select({
+    message: "Open Goals " + opened.length,
+    choices: [...opened]
   })
 }
 
@@ -83,6 +99,10 @@ const start = async () => {
           value: "realized"
         },
         {
+          name: "Open goal",
+          value: "open"
+        },
+        {
           name: "Exit",
           value: "exit"
         }
@@ -99,6 +119,9 @@ const start = async () => {
         break;
       case "realized":
         await realizedGoal();
+        break;
+      case "open":
+        await openGoal();
         break;
       case "exit":
         console.log("See you soon!");
