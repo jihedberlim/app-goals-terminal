@@ -47,6 +47,22 @@ const listGoal = async () => {
   console.log("Goals marked as completed!");
 }
 
+const realizedGoal = async () => {
+  const realized = goals.filter((goal) => {
+    return goal.checked
+  })
+
+  if(realized.length == 0) {
+    console.log("No targets achieved!");
+    return
+  }
+
+  await select({
+    message: "Realized Goals",
+    choices: [...realized]
+  })
+}
+
 const start = async () => {
    
   while(true) {
@@ -63,6 +79,10 @@ const start = async () => {
           value: "list"
         },
         {
+          name: "Realized goal",
+          value: "realized"
+        },
+        {
           name: "Exit",
           value: "exit"
         }
@@ -76,6 +96,9 @@ const start = async () => {
         break;
       case "list":
         await listGoal();
+        break;
+      case "realized":
+        await realizedGoal();
         break;
       case "exit":
         console.log("See you soon!");
