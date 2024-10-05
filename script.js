@@ -4,20 +4,20 @@ let goal = {
   value: 'Drink 3 liters of water a day',
   checked: false,
 }
-let goals = [ goal ]
+let goals = [goal]
 
 const registerGoal = async () => {
   const goal = await input({ message: "Enter a goal:" })
 
-  if(goal.length == 0) {
+  if (goal.length == 0) {
     console.log("The goal can't be empty!");
     return
   }
 
-  goals.push({ 
+  goals.push({
     value: goal,
     checked: false,
-   })
+  })
 }
 
 const listGoal = async () => {
@@ -31,7 +31,7 @@ const listGoal = async () => {
     objective.checked = false
   })
 
-  if(answers.length == 0) {
+  if (answers.length == 0) {
     console.log("No goal selected!");
     return
   }
@@ -52,13 +52,13 @@ const realizedGoal = async () => {
     return goal.checked
   })
 
-  if(realized.length == 0) {
+  if (realized.length == 0) {
     console.log("No targets achieved!");
     return
   }
 
   await select({
-    message: "Realized Goals " + realized.length,
+    message: "Realized Goals: " + realized.length,
     choices: [...realized]
   })
 }
@@ -68,20 +68,45 @@ const openGoal = async () => {
     return goal.checked != true
   })
 
-  if(opened.length == 0) {
+  if (opened.length == 0) {
     console.log("No open goals!");
     return
   }
 
   await select({
-    message: "Open Goals " + opened.length,
+    message: "Open Goals: " + opened.length,
     choices: [...opened]
   })
 }
 
+const deleteGoal = async () => {
+  const unmarkedGoals = goals.map((goal) => {
+    return { value: goal.value, checked: false }
+  })
+
+  const itemsToDelete = await checkbox({
+    message: "Press <space> to select an item to delete and <enter> to proceed.",
+    choices: [...unmarkedGoals],
+    instructions: false,
+  })
+
+  if(itemsToDelete.length == 0) {
+    console.log("No items to delete");
+    return
+  }
+
+  itemsToDelete.forEach((item) => {
+    goals = goals.filter((goal) => {
+      return goal.value != item
+    })
+  })
+
+  console.log("Goals successfully deleted!");
+}
+
 const start = async () => {
-   
-  while(true) {
+
+  while (true) {
 
     const option = await select({
       message: "Menu >",
@@ -103,6 +128,10 @@ const start = async () => {
           value: "open"
         },
         {
+          name: "Delete goal",
+          value: "delete"
+        },
+        {
           name: "Exit",
           value: "exit"
         }
@@ -122,6 +151,9 @@ const start = async () => {
         break;
       case "open":
         await openGoal();
+        break;
+      case "delete":
+        await deleteGoal();
         break;
       case "exit":
         console.log("See you soon!");
