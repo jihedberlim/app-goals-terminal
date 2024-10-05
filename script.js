@@ -1,5 +1,7 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
 
+let message = "Welcome to the Goals App";
+
 let goal = {
   value: 'Drink 3 liters of water a day',
   checked: false,
@@ -10,7 +12,7 @@ const registerGoal = async () => {
   const goal = await input({ message: "Enter a goal:" })
 
   if (goal.length == 0) {
-    console.log("The goal can't be empty!");
+    message = "The goal can't be empty!";
     return
   }
 
@@ -18,6 +20,8 @@ const registerGoal = async () => {
     value: goal,
     checked: false,
   })
+
+  message = "Goal successfully registered!"
 }
 
 const listGoal = async () => {
@@ -32,7 +36,7 @@ const listGoal = async () => {
   })
 
   if (answers.length == 0) {
-    console.log("No goal selected!");
+    message = "No goal selected!";
     return
   }
 
@@ -44,7 +48,7 @@ const listGoal = async () => {
     goal.checked = true
   })
 
-  console.log("Goals marked as completed!");
+  message = "Goals marked as completed!";
 }
 
 const realizedGoal = async () => {
@@ -53,7 +57,7 @@ const realizedGoal = async () => {
   })
 
   if (realized.length == 0) {
-    console.log("No targets achieved!");
+    message = "No targets achieved!";
     return
   }
 
@@ -69,7 +73,7 @@ const openGoal = async () => {
   })
 
   if (opened.length == 0) {
-    console.log("No open goals!");
+    message = "No open goals!";
     return
   }
 
@@ -91,7 +95,7 @@ const deleteGoal = async () => {
   })
 
   if(itemsToDelete.length == 0) {
-    console.log("No items to delete");
+    message = "No items to delete";
     return
   }
 
@@ -101,12 +105,23 @@ const deleteGoal = async () => {
     })
   })
 
-  console.log("Goals successfully deleted!");
+  message = "Goals successfully deleted!";
+}
+
+const showMessage = () => {
+  console.clear();
+
+  if(message != "") {
+    console.log(message)
+    console.log("")
+    message = ""
+  }
 }
 
 const start = async () => {
 
   while (true) {
+    showMessage()
 
     const option = await select({
       message: "Menu >",
@@ -141,7 +156,6 @@ const start = async () => {
     switch (option) {
       case "register":
         await registerGoal();
-        console.log(goals);
         break;
       case "list":
         await listGoal();
