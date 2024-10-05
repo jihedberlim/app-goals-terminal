@@ -36,6 +36,11 @@ const registerGoal = async () => {
 }
 
 const listGoal = async () => {
+  if(goals.length == 0) {
+    message = "There are no goals!"
+    return
+  }
+
   const answers = await checkbox({
     message: "Use <arrows> to navigate, press <space> to select and <enter> to proceed.",
     choices: [...goals],
@@ -63,6 +68,11 @@ const listGoal = async () => {
 }
 
 const realizedGoal = async () => {
+  if(goals.length == 0) {
+    message = "There are no goals!"
+    return
+  }
+
   const realized = goals.filter((goal) => {
     return goal.checked
   })
@@ -79,6 +89,11 @@ const realizedGoal = async () => {
 }
 
 const openGoal = async () => {
+  if(goals.length == 0) {
+    message = "There are no goals!"
+    return
+  }
+
   const opened = goals.filter((goal) => {
     return goal.checked != true
   })
@@ -95,6 +110,11 @@ const openGoal = async () => {
 }
 
 const deleteGoal = async () => {
+  if(goals.length == 0) {
+    message = "There are no goals!"
+    return
+  }
+
   const unmarkedGoals = goals.map((goal) => {
     return { value: goal.value, checked: false }
   })
