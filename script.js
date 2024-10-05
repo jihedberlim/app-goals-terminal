@@ -1,12 +1,23 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
+const fs = require("fs").promises
 
 let message = "Welcome to the Goals App";
 
-let goal = {
-  value: 'Drink 3 liters of water a day',
-  checked: false,
+let goals
+
+const loadGoals = async () => {
+  try {
+    const data = await fs.readFile("goals.json", "utf-8")
+    goals = JSON.parse(data)
+  }
+  catch(error) {
+    goals = []
+  }
 }
-let goals = [goal]
+
+const saveGoals = async () => {
+  await fs.writeFile("goals.json", JSON.stringify(goals, null, 2))
+}
 
 const registerGoal = async () => {
   const goal = await input({ message: "Enter a goal:" })
@@ -119,9 +130,11 @@ const showMessage = () => {
 }
 
 const start = async () => {
+  await loadGoals()
 
   while (true) {
     showMessage()
+    await saveGoals()
 
     const option = await select({
       message: "Menu >",
